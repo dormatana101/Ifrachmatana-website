@@ -397,23 +397,89 @@ content="יפרח מתנה (מתנה יפרח) הוא מפיק מוזיקלי י
   .mtab.active .mtab-count{background:rgba(0,0,0,.2)}
   .mtab-content{display:none}
   .mtab-content.active{display:block}
-  .songs-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
-  @media(max-width:1100px){.songs-grid{grid-template-columns:repeat(4,1fr)}}
-  @media(max-width:780px){.songs-grid{grid-template-columns:repeat(3,1fr)}}
-  @media(max-width:480px){.songs-grid{grid-template-columns:repeat(2,1fr)}}
-  .song-tile{display:block;border-radius:10px;overflow:hidden;border:1px solid var(--line);background:linear-gradient(160deg,var(--charcoal-2),var(--charcoal));transition:border-color .35s,box-shadow .35s,transform .35s;cursor:pointer}
-  .song-tile:hover{border-color:rgba(212,175,55,.5);box-shadow:0 10px 30px rgba(0,0,0,.45),0 0 20px rgba(212,175,55,.1);transform:translateY(-3px)}
-  .song-thumb{position:relative;aspect-ratio:16/9;overflow:hidden;background:#0a0805}
-  .song-thumb img{width:100%;height:100%;object-fit:cover;transition:transform .7s cubic-bezier(.2,.7,.2,1),filter .4s;filter:saturate(.95) contrast(1.02)}
-  .song-tile:hover .song-thumb img{transform:scale(1.07);filter:saturate(1.2) contrast(1.04)}
-  .song-play-overlay{position:absolute;inset:0;z-index:2;display:flex;align-items:center;justify-content:center;background:transparent;transition:background .35s}
-  .song-tile:hover .song-play-overlay{background:rgba(0,0,0,.38)}
-  .song-play-btn{width:38px;height:38px;border-radius:50%;background:rgba(10,10,10,.65);border:1.5px solid rgba(212,175,55,.85);display:flex;align-items:center;justify-content:center;opacity:0;transform:scale(.65);transition:opacity .3s,transform .35s cubic-bezier(.2,.7,.2,1),background .3s;backdrop-filter:blur(6px)}
-  .song-tile:hover .song-play-btn{opacity:1;transform:scale(1)}
-  .song-play-btn svg{width:14px;height:14px;fill:var(--gold);transform:translateX(1px)}
-  .song-info{padding:8px 10px 10px}
-  .song-info h4{font-family:'Heebo',sans-serif;font-weight:700;font-size:12.5px;color:var(--cream);line-height:1.3;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .song-info p{font-family:'Heebo',sans-serif;font-size:10.5px;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  /* === PREMIUM MUSIC SECTION === */
+  #music{position:relative;isolation:isolate;overflow:hidden}
+  .pm-bg{position:absolute;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+  .pm-orb{position:absolute;border-radius:50%;pointer-events:none;will-change:transform}
+  .pm-orb-1{width:700px;height:700px;background:radial-gradient(circle,rgba(212,175,55,.075),transparent 70%);top:-220px;right:-180px;filter:blur(85px)}
+  .pm-orb-2{width:520px;height:520px;background:radial-gradient(circle,rgba(201,150,47,.06),transparent 70%);bottom:-100px;left:-140px;filter:blur(75px)}
+  .pm-orb-3{width:400px;height:400px;background:radial-gradient(circle,rgba(212,175,55,.045),transparent 70%);top:42%;left:52%;transform:translate(-50%,-50%);filter:blur(100px)}
+  #pmParticles{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+  /* Equalizer */
+  .pm-eq{display:inline-flex;align-items:flex-end;gap:3px;height:20px;vertical-align:middle}
+  .pm-eq-bar{width:3px;border-radius:2px 2px 0 0;background:var(--gold);transform-origin:bottom;animation:pmEq 1.1s ease-in-out infinite alternate;will-change:transform}
+  .pm-eq-bar:nth-child(1){height:6px;animation-delay:0s}.pm-eq-bar:nth-child(2){height:14px;animation-delay:.12s}.pm-eq-bar:nth-child(3){height:20px;animation-delay:.24s}.pm-eq-bar:nth-child(4){height:12px;animation-delay:.36s}.pm-eq-bar:nth-child(5){height:18px;animation-delay:.08s}.pm-eq-bar:nth-child(6){height:10px;animation-delay:.2s}.pm-eq-bar:nth-child(7){height:16px;animation-delay:.32s}
+  @keyframes pmEq{0%{transform:scaleY(.2)}100%{transform:scaleY(1)}}
+  /* Counter */
+  .pm-counter{display:inline-flex;align-items:center;gap:10px;padding:10px 18px;border-radius:30px;background:rgba(212,175,55,.06);border:1px solid rgba(212,175,55,.16)}
+  .pm-counter-num{font-family:'Frank Ruhl Libre',serif;font-weight:900;font-size:24px;color:var(--gold);line-height:1}
+  .pm-counter-label{font-family:'Heebo',sans-serif;font-size:11.5px;color:var(--muted);line-height:1.4;max-width:84px}
+  /* Top row */
+  .pm-top-row{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-bottom:32px;position:relative;z-index:2}
+  /* === FEATURED CARD === */
+  .pm-featured{position:relative;z-index:2;display:grid;grid-template-columns:260px 1fr;gap:30px;align-items:center;margin-bottom:44px;padding:26px 30px;border-radius:20px;background:linear-gradient(140deg,rgba(22,18,12,.96),rgba(13,11,8,.98));border:1px solid rgba(212,175,55,.2);box-shadow:0 30px 80px rgba(0,0,0,.65),0 0 80px rgba(212,175,55,.05);overflow:hidden}
+  @media(max-width:700px){.pm-featured{grid-template-columns:1fr;gap:18px;padding:18px 20px}}
+  .pm-featured::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 60% 110% at 0% 50%,rgba(212,175,55,.055),transparent);pointer-events:none}
+  .pm-feat-art-wrap{position:relative;border-radius:14px;overflow:hidden;aspect-ratio:1/1;box-shadow:0 20px 55px rgba(0,0,0,.65),0 0 0 1px rgba(212,175,55,.14);cursor:pointer;display:block}
+  .pm-feat-img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .9s cubic-bezier(.15,.7,.1,1)}
+  .pm-feat-art-wrap:hover .pm-feat-img{transform:scale(1.05) rotate(2deg)}
+  .pm-feat-shine{position:absolute;inset:0;background:linear-gradient(115deg,transparent 35%,rgba(255,255,255,.14) 50%,transparent 65%);transform:translateX(-120%);pointer-events:none}
+  .pm-feat-art-wrap:hover .pm-feat-shine{animation:pmVinylShine .8s ease-in-out forwards}
+  @keyframes pmVinylShine{0%{transform:translateX(-120%)}100%{transform:translateX(120%)}}
+  .pm-feat-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0);transition:background .4s}
+  .pm-feat-art-wrap:hover .pm-feat-overlay{background:rgba(0,0,0,.38)}
+  .pm-feat-play-btn{width:68px;height:68px;border-radius:50%;background:rgba(0,0,0,.4);border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;opacity:0;transform:scale(.55);transition:opacity .4s,transform .5s cubic-bezier(.2,.7,.2,1),background .3s,box-shadow .4s;backdrop-filter:blur(12px);will-change:transform}
+  .pm-feat-art-wrap:hover .pm-feat-play-btn{opacity:1;transform:scale(1);background:rgba(212,175,55,.88);box-shadow:0 0 0 14px rgba(212,175,55,.11),0 0 45px rgba(212,175,55,.45)}
+  .pm-feat-play-btn svg{width:26px;height:26px;fill:#1a1407;transform:translateX(-1px)}
+  .pm-feat-info{position:relative;z-index:2}
+  .pm-feat-badge{display:inline-flex;align-items:center;gap:7px;padding:6px 14px;border-radius:20px;background:rgba(212,175,55,.1);border:1px solid rgba(212,175,55,.25);font-family:'Heebo',sans-serif;font-weight:700;font-size:11px;color:var(--gold);letter-spacing:.1em;margin-bottom:14px;text-transform:uppercase}
+  .pm-feat-title{font-family:'Frank Ruhl Libre',serif;font-weight:900;font-size:clamp(26px,4vw,42px);color:var(--cream);line-height:1.1;margin:0 0 6px}
+  .pm-feat-artist{font-family:'Heebo',sans-serif;font-size:15px;color:var(--muted);font-weight:400;margin-bottom:5px}
+  .pm-feat-credit{font-family:'Heebo',sans-serif;font-size:12px;color:var(--gold-deep);font-weight:500;letter-spacing:.07em;margin-bottom:22px;display:flex;align-items:center;gap:6px}
+  .pm-feat-credit::before{content:"";display:inline-block;width:18px;height:1.5px;background:var(--gold-deep)}
+  .pm-feat-cta{display:inline-flex;align-items:center;gap:10px;padding:13px 26px;border-radius:30px;background:var(--gold);color:#1a1407;font-family:'Heebo',sans-serif;font-weight:700;font-size:14px;transition:transform .35s cubic-bezier(.2,.7,.2,1),box-shadow .35s;box-shadow:0 10px 30px rgba(212,175,55,.28)}
+  .pm-feat-cta:hover{transform:translateY(-2px) scale(1.03);box-shadow:0 16px 42px rgba(212,175,55,.48)}
+  .pm-feat-cta svg{width:18px;height:18px;fill:currentColor;flex-shrink:0}
+  /* === PREMIUM CARDS GRID === */
+  .pm-grid{position:relative;z-index:2;display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
+  @media(max-width:1100px){.pm-grid{grid-template-columns:repeat(4,1fr)}}
+  @media(max-width:780px){.pm-grid{grid-template-columns:repeat(3,1fr)}}
+  @media(max-width:500px){.pm-grid{grid-template-columns:repeat(2,1fr)}}
+  .pm-card{position:relative;display:block;border-radius:13px;overflow:hidden;cursor:pointer;background:linear-gradient(165deg,rgba(24,20,12,.97),rgba(11,9,5,.99));border:1px solid rgba(212,175,55,.1);transition:transform .45s cubic-bezier(.2,.7,.2,1),border-color .4s,box-shadow .4s;will-change:transform;transform-style:preserve-3d}
+  .pm-card:hover{border-color:rgba(212,175,55,.28);box-shadow:0 18px 55px rgba(0,0,0,.55),0 0 35px rgba(212,175,55,.08)}
+  .pm-card::before{content:"";position:absolute;inset:0;background:linear-gradient(165deg,rgba(212,175,55,.065),transparent 55%);opacity:0;transition:opacity .4s;pointer-events:none;z-index:1;border-radius:13px}
+  .pm-card:hover::before{opacity:1}
+  .pm-card-line{position:absolute;top:0;left:0;right:0;height:1.5px;background:linear-gradient(90deg,transparent 5%,var(--gold) 50%,transparent 95%);opacity:0;transition:opacity .4s;z-index:5}
+  .pm-card:hover .pm-card-line{opacity:1}
+  .pm-art{position:relative;aspect-ratio:1/1;overflow:hidden;background:#070503}
+  .pm-artwork{width:100%;height:100%;object-fit:cover;display:block;transition:transform .8s cubic-bezier(.15,.7,.1,1),filter .5s;filter:saturate(1.0) contrast(1.02)}
+  .pm-card:hover .pm-artwork{transform:scale(1.08) rotate(1.5deg);filter:saturate(1.18) brightness(1.06) contrast(1.04)}
+  .pm-shine{position:absolute;inset:0;z-index:3;pointer-events:none;background:linear-gradient(118deg,transparent 30%,rgba(255,255,255,.16) 50%,transparent 70%);transform:translateX(-130%)}
+  .pm-card:hover .pm-shine{animation:pmCardShine .75s ease-in-out forwards .05s}
+  @keyframes pmCardShine{0%{transform:translateX(-130%)}100%{transform:translateX(130%)}}
+  .pm-overlay{position:absolute;inset:0;z-index:2;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0);transition:background .35s}
+  .pm-card:hover .pm-overlay{background:rgba(0,0,0,.38)}
+  .pm-play{width:42px;height:42px;border-radius:50%;background:rgba(5,4,2,.45);border:2px solid rgba(212,175,55,.85);display:flex;align-items:center;justify-content:center;opacity:0;transform:scale(.45);transition:opacity .3s,transform .4s cubic-bezier(.2,.7,.2,1),background .3s,box-shadow .4s;backdrop-filter:blur(10px);will-change:transform}
+  .pm-card:hover .pm-play{opacity:1;transform:scale(1);background:rgba(212,175,55,.88);box-shadow:0 0 0 10px rgba(212,175,55,.1),0 0 28px rgba(212,175,55,.42)}
+  .pm-play svg{width:15px;height:15px;fill:#1a1407;transform:translateX(1px)}
+  .pm-yt{position:absolute;top:7px;left:7px;z-index:4;width:24px;height:24px;border-radius:6px;background:rgba(0,0,0,.65);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .35s;backdrop-filter:blur(6px)}
+  .pm-card:hover .pm-yt{opacity:1}
+  .pm-yt svg{width:13px;height:13px;fill:#fff}
+  .pm-info{padding:9px 10px 11px;position:relative;z-index:2;background:linear-gradient(to top,rgba(8,6,3,.98),rgba(14,11,6,.9))}
+  .pm-title{font-family:'Heebo',sans-serif;font-weight:700;font-size:12.5px;color:var(--cream);margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:color .3s}
+  .pm-card:hover .pm-title{color:var(--gold-soft)}
+  .pm-artist-row{display:flex;align-items:center;margin-top:2px}
+  .pm-artist{font-family:'Heebo',sans-serif;font-size:10.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  /* Floating music notes */
+  .pm-music-notes{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:0}
+  .pm-note{position:absolute;color:rgba(212,175,55,.1);pointer-events:none;will-change:transform,opacity;user-select:none;line-height:1}
+  /* Reduced motion */
+  @media(prefers-reduced-motion:reduce){
+    .pm-eq-bar{animation:none!important;height:12px!important}
+    .pm-card:hover .pm-artwork{transform:scale(1.02) rotate(0deg)!important}
+    .pm-card:hover .pm-shine,.pm-feat-art-wrap:hover .pm-feat-shine{animation:none!important}
+    .pm-card,.pm-featured,.pm-feat-art-wrap,.pm-feat-play-btn{transition-duration:.01ms!important}
+  }
 
   /* ---------- ARTISTS ---------- */
   .artist-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
@@ -440,6 +506,8 @@ content="יפרח מתנה (מתנה יפרח) הוא מפיק מוזיקלי י
   .artist-body p{font-family:'Heebo',sans-serif;font-size:13px;color:var(--muted);font-weight:300;margin-top:6px;line-height:1.55}
   .artist-body .bar{width:26px;height:2px;background:var(--gold);margin-bottom:12px;transition:width .45s}
   .artist-card:hover .bar{width:48px}
+  .artist-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center top;transition:transform .65s ease}
+  .artist-card:hover .artist-img{transform:scale(1.07)}
 
   /* behind the scenes */
   .bts-head{margin-top:clamp(60px,9vw,96px)}
@@ -799,144 +867,129 @@ content="יפרח מתנה, מתנה יפרח, Ifrach Matana, Matana Ifrach, מ�
 
 <!-- ===== MUSIC ===== -->
 <section id="music">
-  <div class="wrap">
+  <div class="pm-bg" aria-hidden="true">
+    <div class="pm-orb pm-orb-1"></div>
+    <div class="pm-orb pm-orb-2"></div>
+    <div class="pm-orb pm-orb-3"></div>
+    <canvas id="pmParticles"></canvas>
+  </div>
+  <div class="pm-music-notes" aria-hidden="true" id="pmNotes"></div>
+  <div class="wrap" style="position:relative;z-index:2">
     <div class="section-tag reveal">מוזיקה</div>
-    <h2 class="section-title reveal d1">הצלילים <span class="gilt">שעיצב</span></h2>
+    <h2 class="section-title reveal d1" id="pmTitle">הצלילים <span class="gilt">שעיצב</span></h2>
+
+    <!-- Equalizer + Counter -->
+    <div class="pm-top-row reveal d2">
+      <div class="pm-eq" aria-hidden="true">
+        <span class="pm-eq-bar"></span><span class="pm-eq-bar"></span><span class="pm-eq-bar"></span><span class="pm-eq-bar"></span><span class="pm-eq-bar"></span><span class="pm-eq-bar"></span><span class="pm-eq-bar"></span>
+      </div>
+      <div class="pm-counter">
+        <span class="pm-counter-num" id="pmCounterNum">47</span>
+        <span class="pm-counter-label">הפקות מוזיקליות</span>
+      </div>
+    </div>
+
+    <!-- Featured Production -->
+    <div class="pm-featured reveal d2" id="pmFeatured">
+      <a class="pm-feat-art-wrap" href="https://www.youtube.com/watch?v=yhVBJe8SZYk" target="_blank" rel="noopener" aria-label="האזן ל-סם האהבה של משה כהן" id="pmFeatArt">
+        <img loading="lazy" src="https://i.ytimg.com/vi/yhVBJe8SZYk/hqdefault.jpg" alt="סם האהבה - משה כהן" class="pm-feat-img" width="480" height="360">
+        <div class="pm-feat-shine" aria-hidden="true"></div>
+        <div class="pm-feat-overlay" aria-hidden="true">
+          <div class="pm-feat-play-btn" id="pmFeatPlayBtn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></div>
+        </div>
+      </a>
+      <div class="pm-feat-info">
+        <div class="pm-feat-badge"><div class="pm-eq" aria-hidden="true" style="height:14px;gap:2px"><span class="pm-eq-bar" style="height:5px"></span><span class="pm-eq-bar" style="height:9px"></span><span class="pm-eq-bar" style="height:14px"></span><span class="pm-eq-bar" style="height:8px"></span><span class="pm-eq-bar" style="height:11px"></span></div>&nbsp;הפקה מובחרת</div>
+        <h3 class="pm-feat-title">סם האהבה</h3>
+        <p class="pm-feat-artist">משה כהן</p>
+        <p class="pm-feat-credit">הפקה מוזיקלית · מתנה יפרח</p>
+        <a href="https://www.youtube.com/watch?v=yhVBJe8SZYk" target="_blank" rel="noopener" class="pm-feat-cta"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg>האזן ב-YouTube</a>
+      </div>
+    </div>
 
     <!-- Tab bar -->
     <div class="music-tabs reveal d1">
-      <button class="mtab active" data-tab="singles">♪ סינגלים <span class="mtab-count">25</span></button>
-      <button class="mtab" data-tab="albums">◉ אלבומים <span class="mtab-count">9</span></button>
+      <button class="mtab active" data-tab="singles">♪ סינגלים <span class="mtab-count">47</span></button>
+      <button class="mtab" data-tab="albums">◉ אלבומים <span class="mtab-count">10</span></button>
     </div>
 
     <!-- ===== SINGLES TAB ===== -->
     <div class="mtab-content active" id="tab-singles">
-      <div class="songs-grid">
+      <div class="pm-grid" id="pmGrid">
 
-        <a class="song-tile" href="https://www.youtube.com/watch?v=V88N5GEYAOE" target="_blank" rel="noopener">
-          <div class="song-thumb"><img loading="lazy" src="https://i.ytimg.com/vi/V88N5GEYAOE/mqdefault.jpg" alt="ריקוד רומנטי"><div class="song-play-overlay"><div class="song-play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div></div>
-          <div class="song-info"><h4>ריקוד רומנטי</h4><p>ישי לוי</p></div>
-        </a>
+        <a class="pm-card" href="https://www.youtube.com/watch?v=yhVBJe8SZYk" target="_blank" rel="noopener" aria-label="סם האהבה · משה כהן"><div class="pm-card-line" aria-hidden="true"></div><div class="pm-art"><img loading="lazy" src="https://i.ytimg.com/vi/yhVBJe8SZYk/hqdefault.jpg" alt="סם האהבה - משה כהן" class="pm-artwork" width="480" height="360"><div class="pm-shine" aria-hidden="true"></div><div class="pm-overlay" aria-hidden="true"><div class="pm-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></div></div><div class="pm-yt" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg></div></div><div class="pm-info"><h4 class="pm-title">סם האהבה</h4><div class="pm-artist-row"><span class="pm-artist">משה כהן</span></div></div></a>
+        <a class="pm-card" href="https://www.youtube.com/watch?v=jARGrSaW4po" target="_blank" rel="noopener" aria-label="פוסע ברחובות · משה כהן"><div class="pm-card-line" aria-hidden="true"></div><div class="pm-art"><img loading="lazy" src="https://i.ytimg.com/vi/jARGrSaW4po/hqdefault.jpg" alt="פוסע ברחובות - משה כהן" class="pm-artwork" width="480" height="360"><div class="pm-shine" aria-hidden="true"></div><div class="pm-overlay" aria-hidden="true"><div class="pm-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></div></div><div class="pm-yt" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg></div></div><div class="pm-info"><h4 class="pm-title">פוסע ברחובות</h4><div class="pm-artist-row"><span class="pm-artist">משה כהן</span></div></div></a>
+        <a class="pm-card" href="https://www.youtube.com/watch?v=WROGcAkuMcA" target="_blank" rel="noopener" aria-label="בין יאוש לתקווה · משה כהן"><div class="pm-card-line" aria-hidden="true"></div><div class="pm-art"><img loading="lazy" src="https://i.ytimg.com/vi/WROGcAkuMcA/hqdefault.jpg" alt="בין יאוש לתקווה - משה כהן" class="pm-artwork" width="480" height="360"><div class="pm-shine" aria-hidden="true"></div><div class="pm-overlay" aria-hidden="true"><div class="pm-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></div></div><div class="pm-yt" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg></div></div><div class="pm-info"><h4 class="pm-title">בין יאוש לתקווה</h4><div class="pm-artist-row"><span class="pm-artist">משה כהן</span></div></div></a>
+        <a class="pm-card" href="https://www.youtube.com/watch?v=-KDGIcAU-Dg" target="_blank" rel="noopener" aria-label="קחי את הדמעות · משה כהן"><div class="pm-card-line" aria-hidden="true"></div><div class="pm-art"><img loading="lazy" src="https://i.ytimg.com/vi/-KDGIcAU-Dg/hqdefault.jpg" alt="קחי את הדמעות - משה כהן" class="pm-artwork" width="480" height="360"><div class="pm-shine" aria-hidden="true"></div><div class="pm-overlay" aria-hidden="true"><div class="pm-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></div></div><div class="pm-yt" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg></div></div><div class="pm-info"><h4 class="pm-title">קחי את הדמעות</h4><div class="pm-artist-row"><span class="pm-artist">משה כהן</span></div></div></a>
+        <a class="pm-card" href="https://www.youtube.com/watch?v=UT08U9rSdLU" target="_blank" rel="noopener" aria-label="משחקי קלפים · משה כהן"><div class="pm-card-line" aria-hidden="true"></div><div class="pm-art"><img loading="lazy" src="https://i.ytimg.com/vi/UT08U9rSdLU/hqdefault.jpg" alt="משחקי קלפים - משה כהן" class="pm-artwork" width="480" height="360"><div class="pm-shine" aria-hidden="true"></div><div class="pm-overlay" aria-hidden="true"><div class="pm-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></div></div><div class="pm-yt" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg></div></div><div class="pm-info"><h4 class="pm-title">משחקי קלפים</h4><div class="pm-artist-row"><span class="pm-artist">משה כהן</span></div></div></a>
+        <a class="pm-card" href="https://www.youtube.com/watch?v=A-35eBrdAuk" target="_blank" rel="noopener" aria-label="בליבי · משה כהן"><div class="pm-card-line" aria-hidden="true"></div><div class="pm-art"><img loading="lazy" src="https://i.ytimg.com/vi/A-35eBrdAuk/hqdefault.jpg" alt="בליבי - משה כהן" class="pm-artwork" width="480" height="360"><div class="pm-shine" aria-hidden="true"></div><div class="pm-overlay" aria-hidden="true"><div class="pm-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></div></div><div class="pm-yt" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg></div></div><div class="pm-info"><h4 class="pm-title">בליבי</h4><div class="pm-artist-row"><span class="pm-artist">משה כהן</span></div></div></a>
+        <a class="pm-card" href="https://www.youtube.com/watch?v=5ROE0BtzI3c" target="_blank" rel="noopener" aria-label="מבט כואב · משה כהן"><div class="pm-card-line" aria-hidden="true"></div><div class="pm-art"><img loading="lazy" src="https://i.ytimg.com/vi/5ROE0BtzI3c/hqdefault.jpg" alt="מבט כואב - משה כהן" class="pm-artwork" width="480" height="360"><div class="pm-shine" aria-hidden="true"></div><div class="pm-overlay" aria-hidden="true"><div class="pm-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></div></div><div class="pm-yt" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg></div></div><div class="pm-info"><h4 class="pm-title">מבט כואב</h4><div class="pm-artist-row"><span class="pm-artist">משה כהן</span></div></div></a>
+        <a class="pm-card" href="https://www.youtube.com/watch?v=kRLZGJBhD5Q" target="_blank" rel="noopener" aria-label="שביל האושר · תמיר גל"><div class="pm-card-line" aria-hidden="true"></div><div class="pm-art"><img loading="lazy" src="https://i.ytimg.com/vi/kRLZGJBhD5Q/hqdefault.jpg" alt="שביל האושר - תמיר גל" class="pm-artwork" width="480" height="360"><div class="pm-shine" aria-hidden="true"></div><div class="pm-overlay" aria-hidden="true"><div class="pm-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></div></div><div class="pm-yt" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg></div></div><div class="pm-info"><h4 class="pm-title">שביל האושר</h4><div class="pm-artist-row"><span class="pm-artist">תמיר גל</span></div></div></a>
+        <a class="pm-card" href="https://www.youtube.com/watch?v=jQNvuPkNWIw" target="_blank" rel="noopener" aria-label="משחקי מילים · תמיר גל וליאת בנאי"><div class="pm-card-line" aria-hidden="true"></div><div class="pm-art"><img loading="lazy" src="https://i.ytimg.com/vi/jQNvuPkNWIw/hqdefault.jpg" alt="משחקי מילים - תמיר גל וליאת בנאי" class="pm-artwork" width="480" height="360"><div class="pm-shine" aria-hidden="true"></div><div class="pm-overlay" aria-hidden="true"><div class="pm-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></div></div><div class="pm-yt" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg></div></div><div class="pm-info"><h4 class="pm-title">משחקי מילים</h4><div class="pm-artist-row"><span class="pm-artist">תמיר גל וליאת בנאי</span></div></div></a>
+        <a class="pm-card" href="https://www.youtube.com/watch?v=SzqU_hhV3Ak" target="_blank" rel="noopener" aria-label="אהבה אסורה · ניבין ותמיר גל"><div class="pm-card-line" aria-hidden="true"></div><div class="pm-art"><img loading="lazy" src="https://i.ytimg.com/vi/SzqU_hhV3Ak/hqdefault.jpg" alt="אהבה אסורה - ניבין ותמיר גל" class="pm-artwork" width="480" height="360"><div class="pm-shine" aria-hidden="true"></div><div class="pm-overlay" aria-hidden="true"><div class="pm-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></div></div><div class="pm-yt" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg></div></div><div class="pm-info"><h4 class="pm-title">אהבה אסורה</h4><div class="pm-artist-row"><span class="pm-artist">ניבין ותמיר גל</span></div></div></a>
+        <a class="pm-card" href="https://www.youtube.com/watch?v=Jej5TBPHZ-o" target="_blank" rel="noopener" aria-label="מתחרט · תמיר גל"><div class="pm-card-line" aria-hidden="true"></div><div class="pm-art"><img loading="lazy" src="https://i.ytimg.com/vi/Jej5TBPHZ-o/hqdefault.jpg" alt="מתחרט - תמיר גל" class="pm-artwork" width="480" height="360"><div class="pm-shine" aria-hidden="true"></div><div class="pm-overlay" aria-hidden="true"><div class="pm-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></div></div><div class="pm-yt" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg></div></div><div class="pm-info"><h4 class="pm-title">מתחרט</h4><div class="pm-artist-row"><span class="pm-artist">תמיר גל</span></div></div></a>
+        <a class="pm-card" href="https://www.youtube.com/watch?v=amGXDPypX60" target="_blank" rel="noopener" aria-label="אל תבכי · תמיר גל"><div class="pm-card-line" aria-hidden="true"></div><div class="pm-art"><img loading="lazy" src="https://i.ytimg.com/vi/amGXDPypX60/hqdefault.jpg" alt="אל תבכי - תמיר גל" class="pm-artwork" width="480" height="360"><div class="pm-shine" aria-hidden="true"></div><div class="pm-overlay" aria-hidden="true"><div class="pm-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></div></div><div class="pm-yt" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg></div></div><div class="pm-info"><h4 class="pm-title">אל תבכי</h4><div class="pm-artist-row"><span class="pm-artist">תמיר גל</span></div></div></a>
+        <a class="pm-card" href="https://www.youtube.com/watch?v=jEiiuHFtpMI" target="_blank" rel="noopener" aria-label="החושך המר · תמיר גל"><div class="pm-card-line" aria-hidden="true"></div><div class="pm-art"><img loading="lazy" src="https://i.ytimg.com/vi/jEiiuHFtpMI/hqdefault.jpg" alt="החושך המר - תמיר גל" class="pm-artwork" width="480" height="360"><div class="pm-shine" aria-hidden="true"></div><div class="pm-overlay" aria-hidden="true"><div class="pm-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></div></div><div class="pm-yt" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg></div></div><div class="pm-info"><h4 class="pm-title">החושך המר</h4><div class="pm-artist-row"><span class="pm-artist">תמיר גל</span></div></div></a>
+        <a class="pm-card" href="https://www.youtube.com/watch?v=Fd06WSkUDIM" target="_blank" rel="noopener" aria-label="תעצרו את העולם · תמיר גל"><div class="pm-card-line" aria-hidden="true"></div><div class="pm-art"><img loading="lazy" src="https://i.ytimg.com/vi/Fd06WSkUDIM/hqdefault.jpg" alt="תעצרו את העולם - תמיר גל" class="pm-artwork" width="480" height="360"><div class="pm-shine" aria-hidden="true"></div><div class="pm-overlay" aria-hidden="true"><div class="pm-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></div></div><div class="pm-yt" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg></div></div><div class="pm-info"><h4 class="pm-title">תעצרו את העולם</h4><div class="pm-artist-row"><span class="pm-artist">תמיר גל</span></div></div></a>
+        <a class="pm-card" href="https://www.youtube.com/watch?v=X2dwCSocCJk" target="_blank" rel="noopener" aria-label="תעצרו את העולם · זהבה בן"><div class="pm-card-line" aria-hidden="true"></div><div class="pm-art"><img loading="lazy" src="https://i.ytimg.com/vi/X2dwCSocCJk/hqdefault.jpg" alt="תעצרו את העולם - זהבה בן" class="pm-artwork" width="480" height="360"><div class="pm-shine" aria-hidden="true"></div><div class="pm-overlay" aria-hidden="true"><div class="pm-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></div></div><div class="pm-yt" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg></div></div><div class="pm-info"><h4 class="pm-title">תעצרו את העולם</h4><div class="pm-artist-row"><span class="pm-artist">זהבה בן</span></div></div></a>
+        <a class="pm-card" href="https://www.youtube.com/watch?v=FZJ5-SiLyFg" target="_blank" rel="noopener" aria-label="מחרוזת קלאסיקה · קוקו מאילת"><div class="pm-card-line" aria-hidden="true"></div><div class="pm-art"><img loading="lazy" src="https://i.ytimg.com/vi/FZJ5-SiLyFg/hqdefault.jpg" alt="מחרוזת קלאסיקה - קוקו מאילת" class="pm-artwork" width="480" height="360"><div class="pm-shine" aria-hidden="true"></div><div class="pm-overlay" aria-hidden="true"><div class="pm-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></div></div><div class="pm-yt" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg></div></div><div class="pm-info"><h4 class="pm-title">מחרוזת קלאסיקה</h4><div class="pm-artist-row"><span class="pm-artist">קוקו מאילת</span></div></div></a>
+        <a class="pm-card" href="https://www.youtube.com/watch?v=9F_2UMbvenU" target="_blank" rel="noopener" aria-label="מחרוזת תמיד איתך · קוקו מאילת"><div class="pm-card-line" aria-hidden="true"></div><div class="pm-art"><img loading="lazy" src="https://i.ytimg.com/vi/9F_2UMbvenU/hqdefault.jpg" alt="מחרוזת תמיד איתך - קוקו מאילת" class="pm-artwork" width="480" height="360"><div class="pm-shine" aria-hidden="true"></div><div class="pm-overlay" aria-hidden="true"><div class="pm-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></div></div><div class="pm-yt" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg></div></div><div class="pm-info"><h4 class="pm-title">מחרוזת תמיד איתך</h4><div class="pm-artist-row"><span class="pm-artist">קוקו מאילת</span></div></div></a>
+        <a class="pm-card" href="https://www.youtube.com/watch?v=k4ndNLoVGnM" target="_blank" rel="noopener" aria-label="בלילות · קוקו מאילת"><div class="pm-card-line" aria-hidden="true"></div><div class="pm-art"><img loading="lazy" src="https://i.ytimg.com/vi/k4ndNLoVGnM/hqdefault.jpg" alt="בלילות - קוקו מאילת" class="pm-artwork" width="480" height="360"><div class="pm-shine" aria-hidden="true"></div><div class="pm-overlay" aria-hidden="true"><div class="pm-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></div></div><div class="pm-yt" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg></div></div><div class="pm-info"><h4 class="pm-title">בלילות</h4><div class="pm-artist-row"><span class="pm-artist">קוקו מאילת</span></div></div></a>
 
-        <a class="song-tile" href="https://www.youtube.com/watch?v=87RCBtcySMQ" target="_blank" rel="noopener">
-          <div class="song-thumb"><img loading="lazy" src="https://i.ytimg.com/vi/87RCBtcySMQ/mqdefault.jpg" alt="ארג'עילי"><div class="song-play-overlay"><div class="song-play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div></div>
-          <div class="song-info"><h4>ארג'עילי</h4><p>ישי לוי</p></div>
-        </a>
 
-        <a class="song-tile" href="https://www.youtube.com/watch?v=kIFeOxOTdLo" target="_blank" rel="noopener">
-          <div class="song-thumb"><img loading="lazy" src="https://i.ytimg.com/vi/kIFeOxOTdLo/mqdefault.jpg" alt="לכבודך"><div class="song-play-overlay"><div class="song-play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div></div>
-          <div class="song-info"><h4>לכבודך</h4><p>ישי לוי</p></div>
-        </a>
+        <a class="pm-card" href="https://www.youtube.com/watch?v=V88N5GEYAOE" target="_blank" rel="noopener" aria-label="ריקוד רומנטי · ישי לוי"><div class="pm-card-line" aria-hidden="true"></div><div class="pm-art"><img loading="lazy" src="https://i.ytimg.com/vi/V88N5GEYAOE/hqdefault.jpg" alt="ריקוד רומנטי - ישי לוי" class="pm-artwork" width="480" height="360"><div class="pm-shine" aria-hidden="true"></div><div class="pm-overlay" aria-hidden="true"><div class="pm-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></div></div><div class="pm-yt" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg></div></div><div class="pm-info"><h4 class="pm-title">ריקוד רומנטי</h4><div class="pm-artist-row"><span class="pm-artist">ישי לוי</span></div></div></a>
 
-        <a class="song-tile" href="https://www.youtube.com/watch?v=i9LtUCGG5I0" target="_blank" rel="noopener">
-          <div class="song-thumb"><img loading="lazy" src="https://i.ytimg.com/vi/i9LtUCGG5I0/mqdefault.jpg" alt="לא אדע לאן"><div class="song-play-overlay"><div class="song-play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div></div>
-          <div class="song-info"><h4>לא אדע לאן</h4><p>ישי לוי</p></div>
-        </a>
+        <a class="pm-card" href="https://www.youtube.com/watch?v=87RCBtcySMQ" target="_blank" rel="noopener" aria-label="ארג'עילי · ישי לוי"><div class="pm-card-line" aria-hidden="true"></div><div class="pm-art"><img loading="lazy" src="https://i.ytimg.com/vi/87RCBtcySMQ/hqdefault.jpg" alt="ארג'עילי - ישי לוי" class="pm-artwork" width="480" height="360"><div class="pm-shine" aria-hidden="true"></div><div class="pm-overlay" aria-hidden="true"><div class="pm-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></div></div><div class="pm-yt" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg></div></div><div class="pm-info"><h4 class="pm-title">ארג'עילי</h4><div class="pm-artist-row"><span class="pm-artist">ישי לוי</span></div></div></a>
 
-        <a class="song-tile" href="https://www.youtube.com/watch?v=pPrVH6ImDGQ" target="_blank" rel="noopener">
-          <div class="song-thumb"><img loading="lazy" src="https://i.ytimg.com/vi/pPrVH6ImDGQ/mqdefault.jpg" alt="קשור אלייך"><div class="song-play-overlay"><div class="song-play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div></div>
-          <div class="song-info"><h4>קשור אלייך</h4><p>ישי לוי</p></div>
-        </a>
+        <a class="pm-card" href="https://www.youtube.com/watch?v=kIFeOxOTdLo" target="_blank" rel="noopener" aria-label="לכבודך · ישי לוי"><div class="pm-card-line" aria-hidden="true"></div><div class="pm-art"><img loading="lazy" src="https://i.ytimg.com/vi/kIFeOxOTdLo/hqdefault.jpg" alt="לכבודך - ישי לוי" class="pm-artwork" width="480" height="360"><div class="pm-shine" aria-hidden="true"></div><div class="pm-overlay" aria-hidden="true"><div class="pm-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></div></div><div class="pm-yt" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg></div></div><div class="pm-info"><h4 class="pm-title">לכבודך</h4><div class="pm-artist-row"><span class="pm-artist">ישי לוי</span></div></div></a>
 
-        <a class="song-tile" href="https://www.youtube.com/watch?v=yjpyvfPd_n0" target="_blank" rel="noopener">
-          <div class="song-thumb"><img loading="lazy" src="https://i.ytimg.com/vi/yjpyvfPd_n0/mqdefault.jpg" alt="תן לי אור"><div class="song-play-overlay"><div class="song-play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div></div>
-          <div class="song-info"><h4>תן לי אור</h4><p>ישי לוי</p></div>
-        </a>
+        <a class="pm-card" href="https://www.youtube.com/watch?v=i9LtUCGG5I0" target="_blank" rel="noopener" aria-label="לא אדע לאן · ישי לוי"><div class="pm-card-line" aria-hidden="true"></div><div class="pm-art"><img loading="lazy" src="https://i.ytimg.com/vi/i9LtUCGG5I0/hqdefault.jpg" alt="לא אדע לאן - ישי לוי" class="pm-artwork" width="480" height="360"><div class="pm-shine" aria-hidden="true"></div><div class="pm-overlay" aria-hidden="true"><div class="pm-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></div></div><div class="pm-yt" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg></div></div><div class="pm-info"><h4 class="pm-title">לא אדע לאן</h4><div class="pm-artist-row"><span class="pm-artist">ישי לוי</span></div></div></a>
 
-        <a class="song-tile" href="https://www.youtube.com/watch?v=xB6r7QQW0zo" target="_blank" rel="noopener">
-          <div class="song-thumb"><img loading="lazy" src="https://i.ytimg.com/vi/xB6r7QQW0zo/mqdefault.jpg" alt="לתת לך אהבה"><div class="song-play-overlay"><div class="song-play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div></div>
-          <div class="song-info"><h4>לתת לך אהבה</h4><p>ישי לוי</p></div>
-        </a>
+        <a class="pm-card" href="https://www.youtube.com/watch?v=pPrVH6ImDGQ" target="_blank" rel="noopener" aria-label="קשור אלייך · ישי לוי"><div class="pm-card-line" aria-hidden="true"></div><div class="pm-art"><img loading="lazy" src="https://i.ytimg.com/vi/pPrVH6ImDGQ/hqdefault.jpg" alt="קשור אלייך - ישי לוי" class="pm-artwork" width="480" height="360"><div class="pm-shine" aria-hidden="true"></div><div class="pm-overlay" aria-hidden="true"><div class="pm-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></div></div><div class="pm-yt" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg></div></div><div class="pm-info"><h4 class="pm-title">קשור אלייך</h4><div class="pm-artist-row"><span class="pm-artist">ישי לוי</span></div></div></a>
 
-        <a class="song-tile" href="https://www.youtube.com/watch?v=9KX15gYBW5I" target="_blank" rel="noopener">
-          <div class="song-thumb"><img loading="lazy" src="https://i.ytimg.com/vi/9KX15gYBW5I/mqdefault.jpg" alt="מאמא מיה"><div class="song-play-overlay"><div class="song-play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div></div>
-          <div class="song-info"><h4>מאמא מיה</h4><p>ישי לוי</p></div>
-        </a>
+        <a class="pm-card" href="https://www.youtube.com/watch?v=yjpyvfPd_n0" target="_blank" rel="noopener" aria-label="תן לי אור · ישי לוי"><div class="pm-card-line" aria-hidden="true"></div><div class="pm-art"><img loading="lazy" src="https://i.ytimg.com/vi/yjpyvfPd_n0/hqdefault.jpg" alt="תן לי אור - ישי לוי" class="pm-artwork" width="480" height="360"><div class="pm-shine" aria-hidden="true"></div><div class="pm-overlay" aria-hidden="true"><div class="pm-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></div></div><div class="pm-yt" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg></div></div><div class="pm-info"><h4 class="pm-title">תן לי אור</h4><div class="pm-artist-row"><span class="pm-artist">ישי לוי</span></div></div></a>
 
-        <a class="song-tile" href="https://www.youtube.com/watch?v=tNeg5WLWfU8" target="_blank" rel="noopener">
-          <div class="song-thumb"><img loading="lazy" src="https://i.ytimg.com/vi/tNeg5WLWfU8/mqdefault.jpg" alt="לא יודעת"><div class="song-play-overlay"><div class="song-play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div></div>
-          <div class="song-info"><h4>לא יודעת</h4><p>ישי לוי</p></div>
-        </a>
+        <a class="pm-card" href="https://www.youtube.com/watch?v=xB6r7QQW0zo" target="_blank" rel="noopener" aria-label="לתת לך אהבה · ישי לוי"><div class="pm-card-line" aria-hidden="true"></div><div class="pm-art"><img loading="lazy" src="https://i.ytimg.com/vi/xB6r7QQW0zo/hqdefault.jpg" alt="לתת לך אהבה - ישי לוי" class="pm-artwork" width="480" height="360"><div class="pm-shine" aria-hidden="true"></div><div class="pm-overlay" aria-hidden="true"><div class="pm-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></div></div><div class="pm-yt" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg></div></div><div class="pm-info"><h4 class="pm-title">לתת לך אהבה</h4><div class="pm-artist-row"><span class="pm-artist">ישי לוי</span></div></div></a>
 
-        <a class="song-tile" href="https://www.youtube.com/watch?v=rmg5aCwQS5Q" target="_blank" rel="noopener">
-          <div class="song-thumb"><img loading="lazy" src="https://i.ytimg.com/vi/rmg5aCwQS5Q/mqdefault.jpg" alt="אבדן התמימות"><div class="song-play-overlay"><div class="song-play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div></div>
-          <div class="song-info"><h4>אבדן התמימות</h4><p>ישי לוי</p></div>
-        </a>
+        <a class="pm-card" href="https://www.youtube.com/watch?v=9KX15gYBW5I" target="_blank" rel="noopener" aria-label="מאמא מיה · ישי לוי"><div class="pm-card-line" aria-hidden="true"></div><div class="pm-art"><img loading="lazy" src="https://i.ytimg.com/vi/9KX15gYBW5I/hqdefault.jpg" alt="מאמא מיה - ישי לוי" class="pm-artwork" width="480" height="360"><div class="pm-shine" aria-hidden="true"></div><div class="pm-overlay" aria-hidden="true"><div class="pm-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></div></div><div class="pm-yt" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg></div></div><div class="pm-info"><h4 class="pm-title">מאמא מיה</h4><div class="pm-artist-row"><span class="pm-artist">ישי לוי</span></div></div></a>
 
-        <a class="song-tile" href="https://www.youtube.com/watch?v=X2NnkmU9AEk" target="_blank" rel="noopener">
-          <div class="song-thumb"><img loading="lazy" src="https://i.ytimg.com/vi/X2NnkmU9AEk/mqdefault.jpg" alt="אישה נאמנה"><div class="song-play-overlay"><div class="song-play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div></div>
-          <div class="song-info"><h4>אישה נאמנה</h4><p>ישי לוי</p></div>
-        </a>
+        <a class="pm-card" href="https://www.youtube.com/watch?v=tNeg5WLWfU8" target="_blank" rel="noopener" aria-label="לא יודעת · ישי לוי"><div class="pm-card-line" aria-hidden="true"></div><div class="pm-art"><img loading="lazy" src="https://i.ytimg.com/vi/tNeg5WLWfU8/hqdefault.jpg" alt="לא יודעת - ישי לוי" class="pm-artwork" width="480" height="360"><div class="pm-shine" aria-hidden="true"></div><div class="pm-overlay" aria-hidden="true"><div class="pm-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></div></div><div class="pm-yt" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg></div></div><div class="pm-info"><h4 class="pm-title">לא יודעת</h4><div class="pm-artist-row"><span class="pm-artist">ישי לוי</span></div></div></a>
 
-        <a class="song-tile" href="https://www.youtube.com/watch?v=ktvXa12VKPM" target="_blank" rel="noopener">
-          <div class="song-thumb"><img loading="lazy" src="https://i.ytimg.com/vi/ktvXa12VKPM/mqdefault.jpg" alt="רוצה אותך"><div class="song-play-overlay"><div class="song-play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div></div>
-          <div class="song-info"><h4>רוצה אותך</h4><p>ישי לוי</p></div>
-        </a>
+        <a class="pm-card" href="https://www.youtube.com/watch?v=rmg5aCwQS5Q" target="_blank" rel="noopener" aria-label="אבדן התמימות · ישי לוי"><div class="pm-card-line" aria-hidden="true"></div><div class="pm-art"><img loading="lazy" src="https://i.ytimg.com/vi/rmg5aCwQS5Q/hqdefault.jpg" alt="אבדן התמימות - ישי לוי" class="pm-artwork" width="480" height="360"><div class="pm-shine" aria-hidden="true"></div><div class="pm-overlay" aria-hidden="true"><div class="pm-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></div></div><div class="pm-yt" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg></div></div><div class="pm-info"><h4 class="pm-title">אבדן התמימות</h4><div class="pm-artist-row"><span class="pm-artist">ישי לוי</span></div></div></a>
 
-        <a class="song-tile" href="https://www.youtube.com/watch?v=4D-Qcrbe0Bg" target="_blank" rel="noopener">
-          <div class="song-thumb"><img loading="lazy" src="https://i.ytimg.com/vi/4D-Qcrbe0Bg/mqdefault.jpg" alt="הזונה מרחוב הש&quot;ך"><div class="song-play-overlay"><div class="song-play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div></div>
-          <div class="song-info"><h4>הזונה מרחוב הש"ך</h4><p>ישי לוי</p></div>
-        </a>
+        <a class="pm-card" href="https://www.youtube.com/watch?v=X2NnkmU9AEk" target="_blank" rel="noopener" aria-label="אישה נאמנה · ישי לוי"><div class="pm-card-line" aria-hidden="true"></div><div class="pm-art"><img loading="lazy" src="https://i.ytimg.com/vi/X2NnkmU9AEk/hqdefault.jpg" alt="אישה נאמנה - ישי לוי" class="pm-artwork" width="480" height="360"><div class="pm-shine" aria-hidden="true"></div><div class="pm-overlay" aria-hidden="true"><div class="pm-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></div></div><div class="pm-yt" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg></div></div><div class="pm-info"><h4 class="pm-title">אישה נאמנה</h4><div class="pm-artist-row"><span class="pm-artist">ישי לוי</span></div></div></a>
 
-        <a class="song-tile" href="https://www.youtube.com/watch?v=Qa3tT6xZ9VU" target="_blank" rel="noopener">
-          <div class="song-thumb"><img loading="lazy" src="https://i.ytimg.com/vi/Qa3tT6xZ9VU/mqdefault.jpg" alt="את"><div class="song-play-overlay"><div class="song-play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div></div>
-          <div class="song-info"><h4>את</h4><p>ישי לוי</p></div>
-        </a>
+        <a class="pm-card" href="https://www.youtube.com/watch?v=ktvXa12VKPM" target="_blank" rel="noopener" aria-label="רוצה אותך · ישי לוי"><div class="pm-card-line" aria-hidden="true"></div><div class="pm-art"><img loading="lazy" src="https://i.ytimg.com/vi/ktvXa12VKPM/hqdefault.jpg" alt="רוצה אותך - ישי לוי" class="pm-artwork" width="480" height="360"><div class="pm-shine" aria-hidden="true"></div><div class="pm-overlay" aria-hidden="true"><div class="pm-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></div></div><div class="pm-yt" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg></div></div><div class="pm-info"><h4 class="pm-title">רוצה אותך</h4><div class="pm-artist-row"><span class="pm-artist">ישי לוי</span></div></div></a>
 
-        <a class="song-tile" href="https://www.youtube.com/watch?v=N0HGlr5ghEs" target="_blank" rel="noopener">
-          <div class="song-thumb"><img loading="lazy" src="https://i.ytimg.com/vi/N0HGlr5ghEs/mqdefault.jpg" alt="אלף פעם"><div class="song-play-overlay"><div class="song-play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div></div>
-          <div class="song-info"><h4>אלף פעם</h4><p>ישי לוי</p></div>
-        </a>
+        <a class="pm-card" href="https://www.youtube.com/watch?v=4D-Qcrbe0Bg" target="_blank" rel="noopener" aria-label="הזונה מרחוב השך · ישי לוי"><div class="pm-card-line" aria-hidden="true"></div><div class="pm-art"><img loading="lazy" src="https://i.ytimg.com/vi/4D-Qcrbe0Bg/hqdefault.jpg" alt="הזונה מרחוב השך - ישי לוי" class="pm-artwork" width="480" height="360"><div class="pm-shine" aria-hidden="true"></div><div class="pm-overlay" aria-hidden="true"><div class="pm-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></div></div><div class="pm-yt" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg></div></div><div class="pm-info"><h4 class="pm-title">הזונה מרחוב הש"ך</h4><div class="pm-artist-row"><span class="pm-artist">ישי לוי</span></div></div></a>
 
-        <a class="song-tile" href="https://www.youtube.com/watch?v=ooSJ7TD0MKs" target="_blank" rel="noopener">
-          <div class="song-thumb"><img loading="lazy" src="https://i.ytimg.com/vi/ooSJ7TD0MKs/mqdefault.jpg" alt="אבא"><div class="song-play-overlay"><div class="song-play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div></div>
-          <div class="song-info"><h4>אבא</h4><p>ישי לוי</p></div>
-        </a>
+        <a class="pm-card" href="https://www.youtube.com/watch?v=Qa3tT6xZ9VU" target="_blank" rel="noopener" aria-label="את · ישי לוי"><div class="pm-card-line" aria-hidden="true"></div><div class="pm-art"><img loading="lazy" src="https://i.ytimg.com/vi/Qa3tT6xZ9VU/hqdefault.jpg" alt="את - ישי לוי" class="pm-artwork" width="480" height="360"><div class="pm-shine" aria-hidden="true"></div><div class="pm-overlay" aria-hidden="true"><div class="pm-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></div></div><div class="pm-yt" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg></div></div><div class="pm-info"><h4 class="pm-title">את</h4><div class="pm-artist-row"><span class="pm-artist">ישי לוי</span></div></div></a>
 
-        <a class="song-tile" href="https://www.youtube.com/watch?v=4I4cOLh0z00" target="_blank" rel="noopener">
-          <div class="song-thumb"><img loading="lazy" src="https://i.ytimg.com/vi/4I4cOLh0z00/mqdefault.jpg" alt="נשמה"><div class="song-play-overlay"><div class="song-play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div></div>
-          <div class="song-info"><h4>נשמה</h4><p>ישי לוי</p></div>
-        </a>
+        <a class="pm-card" href="https://www.youtube.com/watch?v=N0HGlr5ghEs" target="_blank" rel="noopener" aria-label="אלף פעם · ישי לוי"><div class="pm-card-line" aria-hidden="true"></div><div class="pm-art"><img loading="lazy" src="https://i.ytimg.com/vi/N0HGlr5ghEs/hqdefault.jpg" alt="אלף פעם - ישי לוי" class="pm-artwork" width="480" height="360"><div class="pm-shine" aria-hidden="true"></div><div class="pm-overlay" aria-hidden="true"><div class="pm-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></div></div><div class="pm-yt" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg></div></div><div class="pm-info"><h4 class="pm-title">אלף פעם</h4><div class="pm-artist-row"><span class="pm-artist">ישי לוי</span></div></div></a>
 
-        <a class="song-tile" href="https://www.youtube.com/watch?v=aHIplVmBI-M" target="_blank" rel="noopener">
-          <div class="song-thumb"><img loading="lazy" src="https://i.ytimg.com/vi/aHIplVmBI-M/mqdefault.jpg" alt="תשירי ילדה"><div class="song-play-overlay"><div class="song-play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div></div>
-          <div class="song-info"><h4>תשירי ילדה</h4><p>ישי לוי</p></div>
-        </a>
+        <a class="pm-card" href="https://www.youtube.com/watch?v=ooSJ7TD0MKs" target="_blank" rel="noopener" aria-label="אבא · ישי לוי"><div class="pm-card-line" aria-hidden="true"></div><div class="pm-art"><img loading="lazy" src="https://i.ytimg.com/vi/ooSJ7TD0MKs/hqdefault.jpg" alt="אבא - ישי לוי" class="pm-artwork" width="480" height="360"><div class="pm-shine" aria-hidden="true"></div><div class="pm-overlay" aria-hidden="true"><div class="pm-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></div></div><div class="pm-yt" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg></div></div><div class="pm-info"><h4 class="pm-title">אבא</h4><div class="pm-artist-row"><span class="pm-artist">ישי לוי</span></div></div></a>
 
-        <a class="song-tile" href="https://www.youtube.com/watch?v=qqT8J5qMmSA" target="_blank" rel="noopener">
-          <div class="song-thumb"><img loading="lazy" src="https://i.ytimg.com/vi/qqT8J5qMmSA/mqdefault.jpg" alt="לבד"><div class="song-play-overlay"><div class="song-play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div></div>
-          <div class="song-info"><h4>לבד</h4><p>ישי לוי</p></div>
-        </a>
+        <a class="pm-card" href="https://www.youtube.com/watch?v=4I4cOLh0z00" target="_blank" rel="noopener" aria-label="נשמה · ישי לוי"><div class="pm-card-line" aria-hidden="true"></div><div class="pm-art"><img loading="lazy" src="https://i.ytimg.com/vi/4I4cOLh0z00/hqdefault.jpg" alt="נשמה - ישי לוי" class="pm-artwork" width="480" height="360"><div class="pm-shine" aria-hidden="true"></div><div class="pm-overlay" aria-hidden="true"><div class="pm-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></div></div><div class="pm-yt" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg></div></div><div class="pm-info"><h4 class="pm-title">נשמה</h4><div class="pm-artist-row"><span class="pm-artist">ישי לוי</span></div></div></a>
 
-        <a class="song-tile" href="https://www.youtube.com/watch?v=JD3puSS-SH4" target="_blank" rel="noopener">
-          <div class="song-thumb"><img loading="lazy" src="https://i.ytimg.com/vi/JD3puSS-SH4/mqdefault.jpg" alt="אין עוד מלבדו"><div class="song-play-overlay"><div class="song-play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div></div>
-          <div class="song-info"><h4>אין עוד מלבדו</h4><p>ישי לוי</p></div>
-        </a>
+        <a class="pm-card" href="https://www.youtube.com/watch?v=aHIplVmBI-M" target="_blank" rel="noopener" aria-label="תשירי ילדה · ישי לוי"><div class="pm-card-line" aria-hidden="true"></div><div class="pm-art"><img loading="lazy" src="https://i.ytimg.com/vi/aHIplVmBI-M/hqdefault.jpg" alt="תשירי ילדה - ישי לוי" class="pm-artwork" width="480" height="360"><div class="pm-shine" aria-hidden="true"></div><div class="pm-overlay" aria-hidden="true"><div class="pm-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></div></div><div class="pm-yt" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg></div></div><div class="pm-info"><h4 class="pm-title">תשירי ילדה</h4><div class="pm-artist-row"><span class="pm-artist">ישי לוי</span></div></div></a>
 
-        <a class="song-tile" href="https://www.youtube.com/watch?v=jn7-0Y01SB8" target="_blank" rel="noopener">
-          <div class="song-thumb"><img loading="lazy" src="https://i.ytimg.com/vi/jn7-0Y01SB8/mqdefault.jpg" alt="כמו להבה"><div class="song-play-overlay"><div class="song-play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div></div>
-          <div class="song-info"><h4>כמו להבה</h4><p>ישי לוי</p></div>
-        </a>
+        <a class="pm-card" href="https://www.youtube.com/watch?v=qqT8J5qMmSA" target="_blank" rel="noopener" aria-label="לבד · ישי לוי"><div class="pm-card-line" aria-hidden="true"></div><div class="pm-art"><img loading="lazy" src="https://i.ytimg.com/vi/qqT8J5qMmSA/hqdefault.jpg" alt="לבד - ישי לוי" class="pm-artwork" width="480" height="360"><div class="pm-shine" aria-hidden="true"></div><div class="pm-overlay" aria-hidden="true"><div class="pm-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></div></div><div class="pm-yt" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg></div></div><div class="pm-info"><h4 class="pm-title">לבד</h4><div class="pm-artist-row"><span class="pm-artist">ישי לוי</span></div></div></a>
 
-        <a class="song-tile" href="https://www.youtube.com/watch?v=U9UdKL_OQmI" target="_blank" rel="noopener">
-          <div class="song-thumb"><img loading="lazy" src="https://i.ytimg.com/vi/U9UdKL_OQmI/mqdefault.jpg" alt="ועמיר בניון - די לך"><div class="song-play-overlay"><div class="song-play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div></div>
-          <div class="song-info"><h4>ועמיר בניון · די לך</h4><p>ישי לוי</p></div>
-        </a>
+        <a class="pm-card" href="https://www.youtube.com/watch?v=JD3puSS-SH4" target="_blank" rel="noopener" aria-label="אין עוד מלבדו · ישי לוי"><div class="pm-card-line" aria-hidden="true"></div><div class="pm-art"><img loading="lazy" src="https://i.ytimg.com/vi/JD3puSS-SH4/hqdefault.jpg" alt="אין עוד מלבדו - ישי לוי" class="pm-artwork" width="480" height="360"><div class="pm-shine" aria-hidden="true"></div><div class="pm-overlay" aria-hidden="true"><div class="pm-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></div></div><div class="pm-yt" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg></div></div><div class="pm-info"><h4 class="pm-title">אין עוד מלבדו</h4><div class="pm-artist-row"><span class="pm-artist">ישי לוי</span></div></div></a>
 
-        <a class="song-tile" href="https://youtube.com/playlist?list=RDEMnQ_AE7u_bs2eYDDkgxyNfQ&playnext=1" target="_blank" rel="noopener">
-          <div class="song-thumb"><img loading="lazy" src="https://i.ytimg.com/vi/nQ_AE7u_bs2/mqdefault.jpg" alt="מחרוזת דקלון כי אשמרה שבת"><div class="song-play-overlay"><div class="song-play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div></div>
-          <div class="song-info"><h4>מחרוזת כי אשמרה שבת</h4><p>דקלון</p></div>
-        </a>
+        <a class="pm-card" href="https://www.youtube.com/watch?v=jn7-0Y01SB8" target="_blank" rel="noopener" aria-label="כמו להבה · ישי לוי"><div class="pm-card-line" aria-hidden="true"></div><div class="pm-art"><img loading="lazy" src="https://i.ytimg.com/vi/jn7-0Y01SB8/hqdefault.jpg" alt="כמו להבה - ישי לוי" class="pm-artwork" width="480" height="360"><div class="pm-shine" aria-hidden="true"></div><div class="pm-overlay" aria-hidden="true"><div class="pm-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></div></div><div class="pm-yt" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg></div></div><div class="pm-info"><h4 class="pm-title">כמו להבה</h4><div class="pm-artist-row"><span class="pm-artist">ישי לוי</span></div></div></a>
 
-        <a class="song-tile" href="https://www.youtube.com/watch?v=-Mq2t1nvntg" target="_blank" rel="noopener">
-          <div class="song-thumb"><img loading="lazy" src="https://i.ytimg.com/vi/-Mq2t1nvntg/mqdefault.jpg" alt="איילת חן"><div class="song-play-overlay"><div class="song-play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div></div>
-          <div class="song-info"><h4>איילת חן</h4><p>דקלון</p></div>
-        </a>
+        <a class="pm-card" href="https://www.youtube.com/watch?v=U9UdKL_OQmI" target="_blank" rel="noopener" aria-label="ועמיר בניון · די לך · ישי לוי"><div class="pm-card-line" aria-hidden="true"></div><div class="pm-art"><img loading="lazy" src="https://i.ytimg.com/vi/U9UdKL_OQmI/hqdefault.jpg" alt="ועמיר בניון · די לך - ישי לוי" class="pm-artwork" width="480" height="360"><div class="pm-shine" aria-hidden="true"></div><div class="pm-overlay" aria-hidden="true"><div class="pm-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></div></div><div class="pm-yt" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg></div></div><div class="pm-info"><h4 class="pm-title">ועמיר בניון · די לך</h4><div class="pm-artist-row"><span class="pm-artist">ישי לוי</span></div></div></a>
 
-        <a class="song-tile" href="https://www.youtube.com/watch?v=STDASAsgXdc" target="_blank" rel="noopener">
-          <div class="song-thumb"><img loading="lazy" src="https://i.ytimg.com/vi/STDASAsgXdc/mqdefault.jpg" alt="יום שישי הגיע"><div class="song-play-overlay"><div class="song-play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div></div>
-          <div class="song-info"><h4>יום שישי הגיע</h4><p>דקלון וחיים משה</p></div>
-        </a>
+        <a class="pm-card" href="https://youtube.com/playlist?list=RDEMnQ_AE7u_bs2eYDDkgxyNfQ&playnext=1" target="_blank" rel="noopener" aria-label="מחרוזת כי אשמרה שבת · דקלון"><div class="pm-card-line" aria-hidden="true"></div><div class="pm-art"><img loading="lazy" src="https://i.ytimg.com/vi/nQ_AE7u_bs2/hqdefault.jpg" alt="מחרוזת כי אשמרה שבת - דקלון" class="pm-artwork" width="480" height="360"><div class="pm-shine" aria-hidden="true"></div><div class="pm-overlay" aria-hidden="true"><div class="pm-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></div></div><div class="pm-yt" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg></div></div><div class="pm-info"><h4 class="pm-title">מחרוזת כי אשמרה שבת</h4><div class="pm-artist-row"><span class="pm-artist">דקלון</span></div></div></a>
+
+        <a class="pm-card" href="https://www.youtube.com/watch?v=-Mq2t1nvntg" target="_blank" rel="noopener" aria-label="איילת חן · דקלון"><div class="pm-card-line" aria-hidden="true"></div><div class="pm-art"><img loading="lazy" src="https://i.ytimg.com/vi/-Mq2t1nvntg/hqdefault.jpg" alt="איילת חן - דקלון" class="pm-artwork" width="480" height="360"><div class="pm-shine" aria-hidden="true"></div><div class="pm-overlay" aria-hidden="true"><div class="pm-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></div></div><div class="pm-yt" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg></div></div><div class="pm-info"><h4 class="pm-title">איילת חן</h4><div class="pm-artist-row"><span class="pm-artist">דקלון</span></div></div></a>
+
+        <a class="pm-card" href="https://www.youtube.com/watch?v=KelzgYmk-BI" target="_blank" rel="noopener" aria-label="לא רציניית · קוקו מאילת"><div class="pm-card-line" aria-hidden="true"></div><div class="pm-art"><img loading="lazy" src="https://i.ytimg.com/vi/KelzgYmk-BI/hqdefault.jpg" alt="לא רציניית - קוקו מאילת" class="pm-artwork" width="480" height="360"><div class="pm-shine" aria-hidden="true"></div><div class="pm-overlay" aria-hidden="true"><div class="pm-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></div></div><div class="pm-yt" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg></div></div><div class="pm-info"><h4 class="pm-title">לא רציניית</h4><div class="pm-artist-row"><span class="pm-artist">קוקו מאילת</span></div></div></a>
+        <a class="pm-card" href="https://www.youtube.com/watch?v=M8xm3livNaA" target="_blank" rel="noopener" aria-label="זייל הווה · קוקו מאילת"><div class="pm-card-line" aria-hidden="true"></div><div class="pm-art"><img loading="lazy" src="https://i.ytimg.com/vi/M8xm3livNaA/hqdefault.jpg" alt="זייל הווה - קוקו מאילת" class="pm-artwork" width="480" height="360"><div class="pm-shine" aria-hidden="true"></div><div class="pm-overlay" aria-hidden="true"><div class="pm-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></div></div><div class="pm-yt" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg></div></div><div class="pm-info"><h4 class="pm-title">זייל הווה</h4><div class="pm-artist-row"><span class="pm-artist">קוקו מאילת</span></div></div></a>
+        <a class="pm-card" href="https://www.youtube.com/watch?v=MpHX0tOq7rQ" target="_blank" rel="noopener" aria-label="שביל האושר · תמיר גל"><div class="pm-card-line" aria-hidden="true"></div><div class="pm-art"><img loading="lazy" src="https://i.ytimg.com/vi/MpHX0tOq7rQ/hqdefault.jpg" alt="שביל האושר - תמיר גל" class="pm-artwork" width="480" height="360"><div class="pm-shine" aria-hidden="true"></div><div class="pm-overlay" aria-hidden="true"><div class="pm-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></div></div><div class="pm-yt" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg></div></div><div class="pm-info"><h4 class="pm-title">שביל האושר</h4><div class="pm-artist-row"><span class="pm-artist">תמיר גל</span></div></div></a>
+        <a class="pm-card" href="https://www.youtube.com/watch?v=wrE2W6Dm81U" target="_blank" rel="noopener" aria-label="קפה וסיגריה · קוקו מאילת"><div class="pm-card-line" aria-hidden="true"></div><div class="pm-art"><img loading="lazy" src="https://i.ytimg.com/vi/wrE2W6Dm81U/hqdefault.jpg" alt="קפה וסיגריה - קוקו מאילת" class="pm-artwork" width="480" height="360"><div class="pm-shine" aria-hidden="true"></div><div class="pm-overlay" aria-hidden="true"><div class="pm-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></div></div><div class="pm-yt" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg></div></div><div class="pm-info"><h4 class="pm-title">קפה וסיגריה</h4><div class="pm-artist-row"><span class="pm-artist">קוקו מאילת</span></div></div></a>
+        <a class="pm-card" href="https://www.youtube.com/watch?v=STDASAsgXdc" target="_blank" rel="noopener" aria-label="יום שישי הגיע · דקלון וחיים משה"><div class="pm-card-line" aria-hidden="true"></div><div class="pm-art"><img loading="lazy" src="https://i.ytimg.com/vi/STDASAsgXdc/hqdefault.jpg" alt="יום שישי הגיע - דקלון וחיים משה" class="pm-artwork" width="480" height="360"><div class="pm-shine" aria-hidden="true"></div><div class="pm-overlay" aria-hidden="true"><div class="pm-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></div></div><div class="pm-yt" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg></div></div><div class="pm-info"><h4 class="pm-title">יום שישי הגיע</h4><div class="pm-artist-row"><span class="pm-artist">דקלון וחיים משה</span></div></div></a>
 
       </div>
     </div>
@@ -1026,6 +1079,15 @@ content="יפרח מתנה, מתנה יפרח, Ifrach Matana, Matana Ifrach, מ�
           <div class="music-meta"><h3>מירו את עדן הפקות</h3><p>אוסף להיטים · פלייליסט</p></div>
         </a>
 
+        <a class="music-card reveal d1" target="_blank" rel="noopener" href="https://www.youtube.com/playlist?list=OLAK5uy_m_f8TIORB0mo-5-GKutKeVBX6XyruOBxg">
+          <div class="music-art">
+            <img loading="lazy" alt="סופר להיטי זהב" src="https://i.ytimg.com/vi/poQXlZSzWsA/hqdefault.jpg">
+            <div class="music-badge gold">אוסף</div>
+            <div class="music-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+          </div>
+          <div class="music-meta"><h3>סופר להיטי זהב</h3><p>אוסף להיטים · מתנה יפרח</p></div>
+        </a>
+
       </div>
     </div>
 
@@ -1039,16 +1101,18 @@ content="יפרח מתנה, מתנה יפרח, Ifrach Matana, Matana Ifrach, מ�
     <div class="section-tag reveal">האמנים</div>
     <h2 class="section-title reveal d1">האמנים <span class="gilt">שאיתם עבד</span></h2>
     <div class="artist-grid">
-      <div class="artist-card reveal"><div class="artist-initial">א</div><div class="artist-body"><div class="bar"></div><h3>אייל גולן</h3><p>אלבומי הבכורה וההופעות החיות הגדולות</p></div></div>
-      <div class="artist-card reveal d1"><div class="artist-initial">ש</div><div class="artist-body"><div class="bar"></div><h3>שרית חדד</h3><p>"אשליות מתוקות" · מעל 180,000 עותקים</p></div></div>
-      <div class="artist-card reveal d2"><div class="artist-initial">ז</div><div class="artist-body"><div class="bar"></div><h3>זהבה בן</h3><p>"תעצרו את העולם" ועוד</p></div></div>
-      <div class="artist-card reveal d3"><div class="artist-initial">ש</div><div class="artist-body"><div class="bar"></div><h3>שלומי שבת</h3><p>"זמן אהבה" וסדרת "חברים"</p></div></div>
-      <div class="artist-card reveal"><div class="artist-initial">ד</div><div class="artist-body"><div class="bar"></div><h3>דקלון</h3><p>"בזכרי ימים ימימה" ופרויקט צלילי הכרם</p></div></div>
-      <div class="artist-card reveal d1"><div class="artist-initial">י</div><div class="artist-body"><div class="bar"></div><h3>ישי לוי</h3><p>"ריקוד רומנטי", "עננים"</p></div></div>
-      <div class="artist-card reveal d2"><div class="artist-initial">מ</div><div class="artist-body"><div class="bar"></div><h3>משה כהן</h3><p>"נדרתי נדר", "סם האהבה"</p></div></div>
-      <div class="artist-card reveal d3"><div class="artist-initial">ש</div><div class="artist-body"><div class="bar"></div><h3>שימי תבורי</h3><p>"תמיד רומנטי"</p></div></div>
-      <div class="artist-card reveal"><div class="artist-initial">ג</div><div class="artist-body"><div class="bar"></div><h3>שלושת הגדולים</h3><p>משה כהן, אבי ביטר וליאת בנאי</p></div></div>
-      <div class="artist-card reveal d1"><div class="artist-initial">ב</div><div class="artist-body"><div class="bar"></div><h3>בן צור</h3><p>A-List Music</p></div></div>
+      <div class="artist-card reveal"><img class="artist-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Eyal_Golan_1_%28cropped%29.jpg/330px-Eyal_Golan_1_%28cropped%29.jpg" alt="אייל גולן" loading="lazy"><div class="artist-body"><div class="bar"></div><h3>אייל גולן</h3><p>אלבומי הבכורה וההופעות החיות הגדולות</p></div></div>
+      <div class="artist-card reveal d1"><img class="artist-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Sarit_Hadad.jpg/330px-Sarit_Hadad.jpg" alt="שרית חדד" loading="lazy"><div class="artist-body"><div class="bar"></div><h3>שרית חדד</h3><p>"אשליות מתוקות" · מעל 180,000 עותקים</p></div></div>
+      <div class="artist-card reveal d2"><img class="artist-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Zehava_Ben_1.jpg/330px-Zehava_Ben_1.jpg" alt="זהבה בן" loading="lazy"><div class="artist-body"><div class="bar"></div><h3>זהבה בן</h3><p>"תעצרו את העולם" ועוד</p></div></div>
+      <div class="artist-card reveal d3"><img class="artist-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/Shlomi_Shabbat.jpg/330px-Shlomi_Shabbat.jpg" alt="שלומי שבת" loading="lazy"><div class="artist-body"><div class="bar"></div><h3>שלומי שבת</h3><p>"זמן אהבה" וסדרת "חברים"</p></div></div>
+      <div class="artist-card reveal"><img class="artist-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fb/%D7%93%D7%A7%D7%9C%D7%95%D7%9F_%D7%91%D7%94%D7%95%D7%A4%D7%A2%D7%94_%D7%97%D7%99%D7%94_%D7%91%D7%97%D7%95%D7%A3_%D7%90%D7%99%D7%9C%D7%AA.jpg/330px-%D7%93%D7%A7%D7%9C%D7%95%D7%9F_%D7%91%D7%94%D7%95%D7%A4%D7%A2%D7%94_%D7%97%D7%99%D7%94_%D7%91%D7%97%D7%95%D7%A3_%D7%90%D7%99%D7%9C%D7%AA.jpg" alt="דקלון" loading="lazy"><div class="artist-body"><div class="bar"></div><h3>דקלון</h3><p>"בזכרי ימים ימימה" ופרויקט צלילי הכרם</p></div></div>
+      <div class="artist-card reveal d1"><img class="artist-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Yishai_Levi.jpg/330px-Yishai_Levi.jpg" alt="ישי לוי" loading="lazy"><div class="artist-body"><div class="bar"></div><h3>ישי לוי</h3><p>"ריקוד רומנטי", "עננים"</p></div></div>
+      <div class="artist-card reveal d2"><img class="artist-img" src="https://i.ytimg.com/vi/yhVBJe8SZYk/hqdefault.jpg" alt="משה כהן" loading="lazy"><div class="artist-body"><div class="bar"></div><h3>משה כהן</h3><p>"נדרתי נדר", "סם האהבה"</p></div></div>
+      <div class="artist-card reveal d3"><img class="artist-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Shimi_Tavori_B%26W.jpg/330px-Shimi_Tavori_B%26W.jpg" alt="שימי תבורי" loading="lazy"><div class="artist-body"><div class="bar"></div><h3>שימי תבורי</h3><p>"תמיד רומנטי"</p></div></div>
+      <div class="artist-card reveal"><img class="artist-img" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwaEcXorpVcerYYko_fs7FtHG7KWSVKs94mEImnOY62vo6tKcCE7PEN1wH&s=10" alt="שלושת הגדולים" loading="lazy"><div class="artist-body"><div class="bar"></div><h3>שלושת הגדולים</h3><p>משה כהן, אבי ביטר וליאת בנאי</p></div></div>
+      <div class="artist-card reveal d1"><img class="artist-img" src="https://i.scdn.co/image/ab6761610000e5eb4b1d22d23245cdba67e20fae" alt="בן צור" loading="lazy"><div class="artist-body"><div class="bar"></div><h3>בן צור</h3><p>A-List Music</p></div></div>
+      <div class="artist-card reveal d2"><img class="artist-img" src="https://i.ytimg.com/vi/KelzgYmk-BI/hqdefault.jpg" alt="קוקו מאילת" loading="lazy"><div class="artist-body"><div class="bar"></div><h3>קוקו מאילת</h3><p>“לא רציניית”, “זייל הווה”, “קפה וסיגריה”</p></div></div>
+      <div class="artist-card reveal d3"><img class="artist-img" src="https://i.ytimg.com/vi/MpHX0tOq7rQ/hqdefault.jpg" alt="תמיר גל" loading="lazy"><div class="artist-body"><div class="bar"></div><h3>תמיר גל</h3><p>“שביל האושר”, “מתחרט”, “אל תבכי”</p></div></div>
     </div>
 
     <!-- BEHIND THE SCENES -->
@@ -1122,6 +1186,8 @@ content="יפרח מתנה, מתנה יפרח, Ifrach Matana, Matana Ifrach, מ�
 Ifrach Matana
 Matana Ifrach
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
 <script>
   // nav scroll state
   const nav = document.getElementById('nav');
@@ -1217,6 +1283,160 @@ Matana Ifrach
       document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
     });
   });
+
+  // ===== PREMIUM MUSIC SECTION – GSAP =====
+  window.addEventListener('load', function() {
+    if (typeof gsap === 'undefined') return;
+    gsap.registerPlugin(ScrollTrigger);
+    var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // ---- Particles canvas ----
+    var canvas = document.getElementById('pmParticles');
+    if (canvas) {
+      var ctx = canvas.getContext('2d');
+      var pts = [];
+      var PC = 50;
+      function resizePM() {
+        var s = document.getElementById('music');
+        if (s) { canvas.width = s.offsetWidth; canvas.height = s.offsetHeight; }
+      }
+      resizePM();
+      window.addEventListener('resize', resizePM);
+      for (var i = 0; i < PC; i++) {
+        pts.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height,
+          sz: Math.random() * 1.8 + 0.4, sx: (Math.random() - 0.5) * 0.25,
+          sy: -Math.random() * 0.35 - 0.08, op: Math.random() * 0.35 + 0.08, life: Math.random() });
+      }
+      (function animPts() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        pts.forEach(function(p) {
+          p.x += p.sx; p.y += p.sy; p.life += 0.003;
+          if (p.y < -10 || p.x < -10 || p.x > canvas.width + 10) {
+            p.x = Math.random() * canvas.width; p.y = canvas.height + 10; p.life = 0;
+          }
+          var a = Math.sin(p.life * Math.PI) * p.op;
+          ctx.beginPath(); ctx.arc(p.x, p.y, p.sz, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(212,175,55,' + a + ')'; ctx.fill();
+        });
+        requestAnimationFrame(animPts);
+      })();
+    }
+
+    // ---- Floating music notes ----
+    var notesWrap = document.getElementById('pmNotes');
+    if (notesWrap && !reducedMotion) {
+      var noteChars = ['♪','♫','♩','♬','♭'];
+      for (var n = 0; n < 14; n++) {
+        var el = document.createElement('span');
+        el.className = 'pm-note';
+        el.textContent = noteChars[Math.floor(Math.random() * noteChars.length)];
+        el.style.cssText = 'left:' + Math.random() * 100 + '%;top:' + Math.random() * 100 + '%;font-size:' + (Math.random() * 14 + 9) + 'px';
+        notesWrap.appendChild(el);
+        gsap.to(el, { y: -90 - Math.random() * 110, x: (Math.random() - 0.5) * 55,
+          opacity: 0.07, duration: 9 + Math.random() * 7, repeat: -1, yoyo: true,
+          delay: Math.random() * 9, ease: 'sine.inOut' });
+      }
+    }
+
+    // ---- Orb drift ----
+    if (!reducedMotion) {
+      var o1 = document.querySelector('.pm-orb-1'), o2 = document.querySelector('.pm-orb-2'), o3 = document.querySelector('.pm-orb-3');
+      if (o1) gsap.to(o1, { x: 70, y: 55, duration: 14, repeat: -1, yoyo: true, ease: 'sine.inOut' });
+      if (o2) gsap.to(o2, { x: -55, y: -75, duration: 17, repeat: -1, yoyo: true, ease: 'sine.inOut', delay: 2 });
+      if (o3) gsap.to(o3, { x: 40, y: -55, duration: 19, repeat: -1, yoyo: true, ease: 'sine.inOut', delay: 4 });
+      // Scroll parallax on orbs
+      if (o1) gsap.to(o1, { y: '-=120', ease: 'none', scrollTrigger: { trigger: '#music', start: 'top bottom', end: 'bottom top', scrub: 2 } });
+    }
+
+    // ---- Section title parallax ----
+    var pmTitle = document.getElementById('pmTitle');
+    if (pmTitle && !reducedMotion) {
+      gsap.to(pmTitle, { y: -45, ease: 'none', scrollTrigger: { trigger: '#music', start: 'top bottom', end: 'bottom top', scrub: true } });
+    }
+
+    // ---- Production counter ----
+    var counterEl = document.getElementById('pmCounterNum');
+    if (counterEl) {
+      var target = parseInt(counterEl.textContent) || 43;
+      counterEl.textContent = '0';
+      ScrollTrigger.create({ trigger: counterEl, start: 'top 82%', once: true,
+        onEnter: function() {
+          gsap.to({ v: 0 }, { v: target, duration: 1.8, ease: 'power2.out',
+            onUpdate: function() { counterEl.textContent = Math.round(this.targets()[0].v); }
+          });
+        }
+      });
+    }
+
+    // ---- Featured card entrance ----
+    var feat = document.getElementById('pmFeatured');
+    if (feat) {
+      gsap.set(feat, { opacity: 0, y: 50, scale: 0.95 });
+      ScrollTrigger.create({ trigger: feat, start: 'top 85%', once: true,
+        onEnter: function() { gsap.to(feat, { opacity: 1, y: 0, scale: 1, duration: 0.9, ease: 'power3.out' }); }
+      });
+    }
+
+    // ---- Cards entrance (stagger + blur + scale) ----
+    var cards = gsap.utils.toArray('.pm-card');
+    if (!reducedMotion) {
+      gsap.set(cards, { opacity: 0, scale: 0.84, y: 28, filter: 'blur(6px)' });
+    } else {
+      gsap.set(cards, { opacity: 0 });
+    }
+    cards.forEach(function(card, idx) {
+      ScrollTrigger.create({ trigger: card, start: 'top 90%', once: true,
+        onEnter: function() {
+          gsap.to(card, { opacity: 1, scale: 1, y: 0, filter: 'blur(0px)',
+            duration: reducedMotion ? 0.01 : 0.65, ease: 'back.out(1.3)',
+            delay: reducedMotion ? 0 : (idx % 5) * 0.055 });
+        }
+      });
+    });
+
+    // ---- Card hover tilt + magnetic play button ----
+    if (!reducedMotion) {
+      cards.forEach(function(card) {
+        var bounds;
+        card.addEventListener('mouseenter', function() { bounds = card.getBoundingClientRect(); });
+        card.addEventListener('mousemove', function(e) {
+          if (!bounds) return;
+          var rx = -((e.clientY - bounds.top) / bounds.height - 0.5) * 6;
+          var ry = ((e.clientX - bounds.left) / bounds.width - 0.5) * 9;
+          gsap.to(card, { rotationX: rx, rotationY: ry, transformPerspective: 700, duration: 0.35, ease: 'power2.out', overwrite: 'auto' });
+          var pb = card.querySelector('.pm-play');
+          if (pb) {
+            gsap.to(pb, { x: (e.clientX - bounds.left - bounds.width / 2) * 0.15,
+              y: (e.clientY - bounds.top - bounds.height / 2) * 0.15,
+              duration: 0.28, ease: 'power2.out', overwrite: 'auto' });
+          }
+        });
+        card.addEventListener('mouseleave', function() {
+          gsap.to(card, { rotationX: 0, rotationY: 0, duration: 0.6, ease: 'elastic.out(1,.5)', overwrite: 'auto' });
+          var pb = card.querySelector('.pm-play');
+          if (pb) gsap.to(pb, { x: 0, y: 0, duration: 0.4, ease: 'elastic.out(1,.6)', overwrite: 'auto' });
+        });
+      });
+
+      // Featured card magnetic play button
+      var fatArt = document.getElementById('pmFeatArt');
+      var fatBtn = document.getElementById('pmFeatPlayBtn');
+      if (fatArt && fatBtn) {
+        fatArt.addEventListener('mousemove', function(e) {
+          var b = fatArt.getBoundingClientRect();
+          gsap.to(fatBtn, { x: (e.clientX - b.left - b.width / 2) * 0.18,
+            y: (e.clientY - b.top - b.height / 2) * 0.18, duration: 0.28, ease: 'power2.out', overwrite: 'auto' });
+        });
+        fatArt.addEventListener('mouseleave', function() {
+          gsap.to(fatBtn, { x: 0, y: 0, duration: 0.5, ease: 'elastic.out(1,.6)', overwrite: 'auto' });
+        });
+      }
+    }
+
+    ScrollTrigger.refresh();
+  });
+
+
 
 </script>
 </body>
